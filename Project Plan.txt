@@ -12,16 +12,17 @@ GameBoard (Static)
 Blocks  (Generate,Color
 	Animation)
 
-
 Matrix (Storage, Movement Rules,
 	Calculations)
 
-
 Movement Binding
-
 
 Score Printing
 
 
 
 Matrix manipulation ---> GameWindow 'mat' update  ---> 'Variables' update --->  'Labels' update
+
+
+Should have used text instead of Labels. But I can just sychronize background color of label with bg color of cells,
+making it no different to text(in this situation).

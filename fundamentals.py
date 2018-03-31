@@ -11,30 +11,30 @@ class GameWindow(tk.Tk):
     def __init__(self):
         self.FONT = ("Verdana", 40, "bold" )
         super().__init__()
-        self.padding = 5
+        self.padding = 10
         self.windowsize = (self.winfo_screenheight(), self.winfo_screenheight())
-        self.bg_dict = {None: "f5f5f5", 2: "#eee4da", 4: "#ede0c8", 8: "#f2b179", 16: "#f59563",
+        self.bg_dict = {0: '#9e948a', 2: "#eee4da", 4: "#ede0c8", 8: "#f2b179", 16: "#f59563",
                                  32: "#f67c5f", 64: "#f65e3b", 128: "#edcf72", 256: "#edcc61",
                                  512: "#edc850", 1024: "#edc53f", 2048: "#edc22e"}
-        self.cell_dict = {2: "#776e65", 4: "#776e65", 8: "#f9f6f2", 16: "#f9f6f2",
-                           32: "#f9f6f2", 64: "#f9f6f2", 128: "#f9f6f2", 256: "#f9f6f2",
-                           512: "#f9f6f2", 1024: "#f9f6f2", 2048: "#f9f6f2"}
-        main_options = {"height" : self.windowsize[0],
-                        "width" : self.windowsize[1],
-                        'bg' : "white",
+        self.cell_dict ={0: "gray", 2: "#776e65", 4: "#776e65", 8: "#f9f6f2", 16: "#f9f6f2",
+                            32: "#f9f6f2", 64: "#f9f6f2", 128: "#f9f6f2", 256: "#f9f6f2",
+                            512: "#f9f6f2", 1024: "#f9f6f2", 2048: "#f9f6f2"}
+
+        main_options ={ 'bg' : "#92877d",
                         'padx' : self.padding,
-                        'pady' : self.padding
-        }
+                        'pady' : self.padding}
         self.config(main_options)
         self.title('Game of 2048')
-        self.resizable(width=False, height=False)
+        self.resizable(width = False, height = False)
         self.variables = [tk.IntVar() for _ in range(16)]
         # Arranged in a left to right order from Top-left corner.
         self.matrix = None
 
+
         def makegrids():
+            """Bg tiles stay in place. They will never ever move."""
             background_cells = \
-                [tk.Frame(self, bg="gray", height=self.windowsize[0] // 5, width=self.windowsize[1] // 5) for _ in
+                [tk.Frame(self, bg= self.bg_dict[0], height=self.windowsize[0] // 5, width=self.windowsize[1] // 5) for _ in
                  range(16)]
 
             for i, cell in enumerate(background_cells):
@@ -43,17 +43,21 @@ class GameWindow(tk.Tk):
         makegrids()
 
         def maketiles():
-            fg_tiles_options = {'bg': "black",
-                                'height': self.windowsize[0] // 5,
-                                'width': self.windowsize[1] // 5
-                                }
+            self.fg_tiles =[tk.Frame(self, bg=self.bg_dict[0], height = self.windowsize[0] // 5,\
+                                width = self.windowsize[1] // 5) for _ in range(16)]
 
-            self.foreground_tiles = \
-                [tk.Frame(self, **fg_tiles_options) for _ in range(16)]
-
-            for i, tile in enumerate(self.foreground_tiles):
+            for i, tile in enumerate(self.fg_tiles):
                 tile.grid(row=i // 4, column=i % 4, padx=self.padding, pady=self.padding)
+                tile.pack_propagate(False)
         maketiles()
+
+    def bind_label_variable(self):
+        """Labels stay in spot."""
+        self.labels = [tk.Label(master = self.fg_tiles[i]) for i in range(16)]
+        for i, label in enumerate(self.labels):
+            display = self.variables[i].get()
+            label.config(text = display, font = self.FONT, fg = "black", justify = "center", bg = "gray")
+            label.place(relx = 0.5, rely= 0.5, anchor = 'center')
 
     def matrix_sync(self, matrix):
         """
@@ -71,13 +75,14 @@ class GameWindow(tk.Tk):
         for i, var in enumerate(self.variables):
             var.set(self.matrix[i//4][i%4])
 
-    def bind_label_variable(self):
-        """Labels stay in spot."""
-        self.labels = [tk.Label(self.foreground_tiles[i]) for i in range(16)]
+    def label_sync(self):
         for i, label in enumerate(self.labels):
-            display = self.variables[i].get()
-            label.config(text = display, font = self.FONT, fg = "black", justify = "center", bg = "gray")
-            label.pack()
+            num = self.variables[i].get()
+            if num == 0:
+                label.config(text=num, fg=self.bg_dict[0], bg=self.bg_dict[0])
+            else:
+                label.config(text = num, fg = self.cell_dict[num], bg= self.bg_dict[num])
+
 
 
 class GameMatrix():
@@ -100,10 +105,10 @@ class GameMatrix():
     def __str__(self):
 
         definition = \
-            """Matrix manipulations part of the program.
-            self.scoremat[1][3] stands for row 2 column 4.
-            [0][0] is top-left corner. 
-            """
+        """Matrix manipulations part of the program.
+        self.scoremat[1][3] stands for row 2 column 4.
+        [0][0] is top-left corner. 
+        """
         return definition
 
     # def tell_pos(self,tuple = None):
