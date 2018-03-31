@@ -1,0 +1,25 @@
+This project will be written bottom-up.
+Bottom-up is a relatively safer approach in engineering, because it is easier to debug each part first
+before putting everything altogether.
+Top-down does offer a generally easier start, but not for more complex programs.
+
+Stage 1:
+
+Core Classes:
+
+GameBoard (Static)
+
+Blocks  (Generate,Color
+	Animation)
+
+
+Matrix (Storage, Movement Rules,
+	Calculations)
+
+
+Movement Binding
+
+
+Score Printing
+
+
