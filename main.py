@@ -1,17 +1,19 @@
-import classes as clss
+import fundamentals as fund
 
-game = clss.GameWindow()
+game = fund.GameWindow()
 
-game.makegrids()
-game.maketiles()
-mat = clss.GameMatrix()
+mat = fund.GameMatrix()
 
 mat.check_ava()
-mat.droptwoorfour()
+mat.drop_num()
 mat.check_ava()
-mat.droptwoorfour()
+mat.drop_num()
 game.matrix_sync(mat.scoremat)
-game.mat_varibales()
+game.variable_sync()
 game.bind_label_variable()
+
+print(mat.print_mat())
+
+
 
 game.mainloop()

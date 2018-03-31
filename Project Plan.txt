@@ -23,3 +23,5 @@ Movement Binding
 Score Printing
 
 
+
+Matrix manipulation ---> GameWindow 'mat' update  ---> 'Variables' update --->  'Labels' update
